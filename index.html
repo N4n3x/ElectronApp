@@ -2,18 +2,34 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>ElectronApp</title>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script> 
+    <script src="node_modules/jQuery/lib/node-jquery.js"></script>        
+    <script>if (window.module) module = window.module;</script>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-
+    <h1>Hello world!</h1>
+    <input type="button" id="ipc" value="SEND"/>
     <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
+        
+        const {ipcRenderer} = require('electron')
+        //require('./Models/renderer.js')
+        require('./Models/jquery-3.3.1.js')
+
+        console.log(ipcRenderer.sendSync('sync_message','test'))
+
+        ipcRenderer.on('async_reply', (event,arg) => {
+            console.log(arg)
+        })
+
+        $( "#ipc" ).click(function() {
+        console.log('oki')
+        });
+
+        ipcRenderer.send('async_message','TEST')
+        
     </script>
   </body>
 </html>
+
+
